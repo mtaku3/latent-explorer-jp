@@ -25,7 +25,7 @@ class LLM:
     
     DEFAULT_TARGET_SYS_INST = "You are an assistant with expertise in fact-checking. Your role is to assess claims."
     
-    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None):
+    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None, model_folder: Path = None):
         self.model_name = model_name
         self.inputs = inputs
         
@@ -34,6 +34,8 @@ class LLM:
 
         # Access token for downloading the model
         self.hf_access_token = hf_access_token
+
+        self.model_folder = Path('.models') if model_folder is None else model_folder
         
         # Set the placeholder token
         self.placeholder_token = "x"
@@ -60,16 +62,15 @@ class LLM:
     def _download_model(self):
        
         # Create the model folder if it does not exist  
-        model_folder = Path('.models')
-        model_folder.mkdir(parents=True, exist_ok=True)
+        self.model_folder.mkdir(parents=True, exist_ok=True)
         
         # Download the model if not exists
-        self.model_path = model_folder.joinpath(self.model_name)
+        self.model_path = self.model_folder.joinpath(self.model_name)
         if not self.model_path.exists():
             print(f"\n[INFO] Downloading the model from Hugging Face: {self.model_name}\n")
             
             try:
-                download_from_hub(repo_id = self.model_name, access_token = self.hf_access_token, checkpoint_dir = model_folder) 
+                download_from_hub(repo_id = self.model_name, access_token = self.hf_access_token, checkpoint_dir = self.model_folder) 
             except ValueError as e:
                 if self.hf_access_token is None:
                     print(f'[ERROR] {self.model_name} requires authentication, please set the `hf_access_token` variable in the LatentExplorer class. You can find your token by visiting https://huggingface.co/settings/tokens')
