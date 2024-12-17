@@ -25,7 +25,7 @@ class LLM:
     
     DEFAULT_TARGET_SYS_INST = "You are an assistant with expertise in fact-checking. Your role is to assess claims."
     
-    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None, model_folder: Path = None):
+    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None, model_folder: str = None):
         self.model_name = model_name
         self.inputs = inputs
         
@@ -35,7 +35,7 @@ class LLM:
         # Access token for downloading the model
         self.hf_access_token = hf_access_token
 
-        self.model_folder = Path('.models') if model_folder is None else model_folder
+        self.model_folder = Path('.models') if model_folder is None else Path(model_folder)
         
         # Set the placeholder token
         self.placeholder_token = "x"

@@ -12,7 +12,7 @@ from .patcher import Patcher
 from .utils.utils import clean_token
 
 class LatentExplorer(LLM):
-    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None, model_folder: Path = None):
+    def __init__(self, model_name:str, inputs: list[str], hf_access_token:str = None, model_folder: str = None):
         super().__init__(model_name, inputs, hf_access_token, model_folder)
         
         # Perform part-of-speech tagging
